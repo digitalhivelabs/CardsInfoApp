@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace CardsProfileApp.API.Models
 {
@@ -9,6 +10,5 @@ namespace CardsProfileApp.API.Models
         public string RealName { get; set; }
         public DateTime BirthDate { get; set; }     
         public string BirthPlace { get; set; }    
-
     }
 }

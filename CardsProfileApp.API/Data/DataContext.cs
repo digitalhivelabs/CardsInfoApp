@@ -9,5 +9,6 @@ namespace CardsProfileApp.API.Data
         {}
         
         public DbSet<ProfileCard> ProfileCards { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
