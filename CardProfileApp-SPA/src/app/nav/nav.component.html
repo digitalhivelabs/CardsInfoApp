@@ -13,15 +13,31 @@
       <li class="nav-item"  routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/messages']">Messages</a>
       </li>
-    </ul>
+      <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/messages']">Actress</a>
+      </li>
+      <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/messages']">Centerfolds</a>
+      </li>
+      <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/messages']">PS</a>
+      </li>
+      <li class="nav-item"  routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/messages']">Scorts</a>
+      </li>
+
+      </ul>
 
     <div class="dropdown" *ngIf="loggedIn()" dropdown>
+      <span class="mr-1">
+        <img src="{{photoUrl}}" alt="" />
+      </span>
         <a class="dropdown-toggle text-light" dropdownToggle>
           Welcome {{_autService.decodedToken?.given_name}}
         </a>
       
         <div class="dropdown-menu mt-3" aria-labelledby="dropdownMenuLink" *dropdownMenu>
-          <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Edit Profile</a>
+          <a class="dropdown-item" [routerLink]="['/member/edit']"><i class="fa fa-user"></i> Edit Profile</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
         </div>

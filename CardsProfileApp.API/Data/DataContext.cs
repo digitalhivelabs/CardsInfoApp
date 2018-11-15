@@ -8,7 +8,15 @@ namespace CardsProfileApp.API.Data
         public DataContext(DbContextOptions<DataContext> options): base(options)
         {}
         
-        public DbSet<ProfileCard> ProfileCards { get; set; }
+        //public DbSet<ProfileCard> ProfileCards { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+        //PS Data.
+        public DbSet<PSProfile> PSProfiles { get; set;}
+
+        //Centerforlds
+
+        //Actress
+
     }
 }
