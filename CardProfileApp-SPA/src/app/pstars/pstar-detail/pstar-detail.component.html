@@ -1,26 +1,51 @@
 <div class="container mt-4">
   <div class="row">
+    <h1>{{profile?.knownName}}'s Profile</h1>
+  </div>
+  <div class="row">
     <div class="col-sm-4">
       <div class="card">
-        <img class="card-img-top img-thumbnail" src="http://xpesdcompany-001-site3.ctempurl.com/temp/profiles/lillycollins.jpg"
-          alt="Sample" />
+        <img class="card-img-top img-thumbnail" src="{{profile?.photoUrl || '../../../assets/user.png'}}" alt="Sample" />
         <div class="card-body">
           <div>
+              <div class="alert alert-success" role="alert">
+                  <h4 class="alert-heading">{{ profile?.knownName }}</h4>
+                  <p>
+                    <img src="../assets/ad.png" alt=""/>
+                    <small> | status (death, retired, active) </small>
+                  </p>
+                  <hr>
+                  <p class="mb-0">
+                      <span class="badge badge-primary">Primary</span>&nbsp;
+                      <span class="badge badge-secondary">Secondary</span>&nbsp;
+                      <span class="badge badge-success">Success</span>&nbsp;
+                      <span class="badge badge-danger">Danger</span>&nbsp;
+                      <span class="badge badge-warning">Warning</span>&nbsp;
+                      <span class="badge badge-info">Info</span>&nbsp;
+                      <span class="badge badge-light">Light</span>&nbsp;
+                      <span class="badge badge-dark">Dark</span>
+                  </p>
+                </div>
+          </div>
+
+          <div>
             <strong>A.K.A:</strong>
-            <p>Alias 1, Alias 2, Alias 3, Alias 4, Alias 5, Alias 6, Alias 7, Alias 8</p>
+            <p>
+              {{profile?.knownNames}}
+            </p>
           </div>
 
           <div>
             <strong>Date Of Birth:</strong>
-            <p>1975/09/18 (30 years - Cancer)</p>
+            <p>{{ profile?.birthDate | date: "mediumDate" }} ( {{ profile?.age}} years - {{profile?.sign}} )</p>
           </div>
           <div>
             <strong>Birthplace:</strong>
-            <p>City, Country</p>
+            <p>{{ profile?.birthPlace }}, {{ profile?.birthCountry }}</p>
           </div>
-          <div>
+          <div *ngIf="profile?.residence || profile?.residenceCountry">
             <strong>Residence:</strong>
-            <p>City, Country</p>
+            <p>{{ profile?.residence }}<span *ngIf="profile?.residenceCountry">, </span>{{ profile?.residenceCountry }}</p>
           </div>
           <div class="mb-3">
             <div class="row">
@@ -29,9 +54,9 @@
               <div class="col-sm-4"><strong>Years in B.</strong></div>
             </div>
             <div class="row">
-              <div class="col-sm-4">2008</div>
-              <div class="col-sm-4">Present</div>
-              <div class="col-sm-4">10 years</div>
+              <div class="col-sm-4">{{ profile?.careerStartYear }}</div>
+              <div class="col-sm-4">{{ profile?.careerEndYear }}</div>
+              <div class="col-sm-4">{{ profile?.yearsInBusiness }} <span *ngIf="profile?.yearsInBusiness">years</span></div>
             </div>
           </div>
           <div class="mb-3">
@@ -40,8 +65,8 @@
               <div class="col-sm-6"><strong>Weigth:</strong></div>
             </div>
             <div class="row">
-              <div class="col-sm-6">171cm (5'7)</div>
-              <div class="col-sm-6">125 lbl. (57 kg)</div>
+              <div class="col-sm-6"><small>{{ profile?.height }}</small></div>
+              <div class="col-sm-6"><small>{{ profile?.weight }}</small></div>
             </div>
           </div>
           <div class="mb-3">
@@ -50,28 +75,28 @@
               <div class="col-sm-6"><strong>Measurements:</strong></div>
             </div>
             <div class="row">
-              <div class="col-sm-6">Skinny</div>
-              <div class="col-sm-6">34C-24-34</div>
+              <div class="col-sm-6">{{ profile?.bodyType }}</div>
+              <div class="col-sm-6">{{ profile?.measurements }}</div>
             </div>
           </div>
           <div>
             <strong>Breast:</strong>
-            <p>Natural, Medium(B)</p>
+            <p>{{ profile?.breast }}</p>
           </div>
           <div>
             <strong>Tattos:</strong>
-            <p>None</p>
+            <p>{{ profile?.tattos }}</p>
           </div>
           <div>
             <strong>Piercings:</strong>
-            <p>Navel</p>
+            <p>{{ profile?.piercings }}</p>
           </div>
 
           <div class="card-footer">
             <div class="btn-group d-flex">
               <button class="btn btn-primary w-100">Like</button>
-              <button class="btn btn-success w-100">Reviews</button>
-              <button class="btn btn-secondary w-100">Scorting</button>
+              <button class="btn btn-success w-100">Comments</button>
+              <button *ngIf="profile?.scortingProfileId && profile.scortingProfileId > 0" class="btn btn-secondary w-100">Scorting</button>
             </div>
           </div>
         </div>
@@ -85,126 +110,67 @@
           <tab heading="What we know">
             <h4>Social Networks</h4>
             <p>
-              <button class="btn btn-primary mr-1"><i class="fa fa-facebook-f"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-twitter"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-instagram"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-tumblr"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-google"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-whatsapp"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-youtube"></i></button>
-              <button class="btn btn-primary mr-1"><i class="fa fa-linkedin"></i></button>
+              <span *ngFor="let item of profile?.socialNetworks">
+                <a [attr.href]="item.url" class="btn mr-1" target="_blank" [ngStyle]="{'background-color': item.color}">
+                  <i style="color:#fff" [class]="item.faIcon"></i>
+                </a>
+              </span>
             </p>
             <h4>Biography</h4>
-            <p>Introduction</p>
+            <div [innerHTML]="profile?.whatWeKnow"></div>
             <h4>Other Related Info</h4>
-            <p>Some Text</p>
+            <div [innerHTML]="profile?.otherRelatedInfo"></div>
           </tab>
           <tab heading="More data">
             <h4>Interests</h4>
             <div class="row">
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
-              </div>
-              <div class="col-sm-3">
-                <strong>Key:</strong>
-                <p>Value</p>
+              <div *ngFor="let item of profile?.dataSpecifications" class="col-sm-3">
+                <strong>{{ item.displayLabel }}:</strong>
+                <p>{{ item.displayValue }}</p>
               </div>
             </div>
             <h4>Links related</h4>
-            <p><a href="#">Link 1</a></p>
-            <p><a href="#">Link 2</a></p>
-            <p><a href="#">Link 3</a></p>
-            <p><a href="#">Link 4</a></p>
+            <p *ngFor="let itm of profile?.relatedLinks">
+              <a target="_blank" [attr.href]="itm.linkUrl">{{ itm.displayLabel }}</a>
+            </p>
           </tab>
           <tab heading="Interviews">
-            <h4>Relevant Questions</h4>
-            <h5>Question 1</h5>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-            <h5>Question 2</h5>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-            <h5>Question 3</h5>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-            <h5>Question 4</h5>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-
-            <h4>Interviews:</h4>
-            <p><a href="#">Link 1</a></p>
-            <p><a href="#">Link 2</a></p>
-            <p><a href="#">Link 3</a></p>
-            <p><a href="#">Link 4</a></p>
-
+            <h4>Relevant Interview Questions</h4>
+            <div *ngFor="let itm of profile?.relevantQuestions">
+              <h5>{{ itm.question }}</h5>
+              <div><small><a [attr.href]="itm.sourceUrl">{{ itm.sourceSite }}</a></small></div>
+              <p>{{ itm.answer }}</p>
+            </div>
           </tab>
           <tab heading="Photos">
-              <h4>Galleries</h4>
-              <h5>Gallery 1 (10 photos) <button class="btn btn-info"><i class="fa fa-link"></i> Show Download links</button></h5>
-              <div class="container">
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
+            <h4>Galleries</h4>
+
+            <div *ngFor="let itm of profile?.photoGalleries" class="mb-3">
+              <h5>{{ itm.displayLabel }} ( {{ itm.qtyPhotos }} photos )
+                <a [attr.href]="itm.photoPackUrl" class="btn btn-info btn-sm">
+                  <i class="fa fa-download"></i>
+                </a>
+              </h5>
+              <ngx-gallery [options]="galleryOptions" [images]="galleries[itm.id]"></ngx-gallery>
             </div>
 
-            <h5>Gallery 2 (30 photos) <button class="btn btn-info"><i class="fa fa-link"></i> Show Download links</button></h5>
-            <div class="container">
-                <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-          </div>
-
-              <h5>Gallery 3 (34 photos) <button class="btn btn-info"><i class="fa fa-link"></i> Show Download links</button></h5>
-              <div class="container">
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/200/200/?random" alt=""/>
-            </div>
-
-              
-              <h4>Sites Related:</h4>
-              <p><a href="#">Link 1</a></p>
-              <p><a href="#">Link 2</a></p>
-              <p><a href="#">Link 3</a></p>
-              <p><a href="#">Link 4</a></p>
-  
           </tab>
           <tab heading="Videos">
-            <div>
-              <h3>Title</h3>
+            <div class="mb-3" *ngFor="let itm of profile?.videoGalleries">
+              <h3>{{ itm.displayValue }}</h3>
               <p>
-                  <img class="img-responsive mr-1 mb-1" src="https://picsum.photos/600/600/?random" alt=""/>
+                <img class="img-responsive mr-1 mb-1" src="{{ itm.previewUrl }}" alt="" />
               </p>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <p [innerHTML]="itm.description"></p>
 
-              <h4>Links:</h4>
-              <div><a href="#">Link 1</a></div>
-              <div><a href="#">Link 2</a></div>
-              <div><a href="#">Link 3</a></div>
-              <div><a href="#">Link 4</a></div>
+              <div *ngFor="let vg of itm.downloadLinks">
+                <strong class="mt-2 mb-2">{{vg.source}}:</strong>
+                <div *ngFor="let u of vg.urls">
+                  <small>
+                    <a [attr.href]="u.videoDownloadUrl" target="_blank">{{ u.videoDownloadUrl }}</a>
+                  </small>
+                </div>
+              </div>
 
             </div>
           </tab>

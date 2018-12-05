@@ -39,15 +39,14 @@ namespace CardsProfileApp.API.Controllers
                 return BadRequest("User name already exists");
             }
 
-            var userToCreate = new User
-            {
-                UserName = userForRegister.UserName,
-                DisplayName = userForRegister.DisplayName
-            };
+            var userToCreate = this._mapper.Map<User>(userForRegister);
 
             var createdUser = await this._repo.Register(userToCreate, userForRegister.Password);
 
-            return StatusCode(201);
+            var userToReturn = this._mapper.Map<ProfileForDetailDTO>(createdUser);
+
+            return CreatedAtRoute("GetUser", new { controller = "Users", id = createdUser.Id }, userToReturn);
+
 
         }
 

@@ -16,6 +16,49 @@ namespace CardsProfileApp.API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
 
+            modelBuilder.Entity("CardsProfileApp.API.Models.Like", b =>
+                {
+                    b.Property<int>("LikerId");
+
+                    b.Property<int>("LikeeId");
+
+                    b.HasKey("LikerId", "LikeeId");
+
+                    b.HasIndex("LikeeId");
+
+                    b.ToTable("Likes");
+                });
+
+            modelBuilder.Entity("CardsProfileApp.API.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime?>("DateRead");
+
+                    b.Property<bool>("IsRead");
+
+                    b.Property<DateTime>("MessageSent");
+
+                    b.Property<bool>("RecipientDeleted");
+
+                    b.Property<int>("RecipientId");
+
+                    b.Property<bool>("SenderDeleted");
+
+                    b.Property<int>("SenderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("CardsProfileApp.API.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -84,6 +127,8 @@ namespace CardsProfileApp.API.Migrations
                     b.Property<int>("PSProfileId");
 
                     b.Property<string>("PhotoPackUrl");
+
+                    b.Property<int>("QtyPhotos");
 
                     b.HasKey("Id");
 
@@ -310,6 +355,32 @@ namespace CardsProfileApp.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CardsProfileApp.API.Models.Like", b =>
+                {
+                    b.HasOne("CardsProfileApp.API.Models.User", "Likee")
+                        .WithMany("Likers")
+                        .HasForeignKey("LikeeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("CardsProfileApp.API.Models.User", "Liker")
+                        .WithMany("Likees")
+                        .HasForeignKey("LikerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("CardsProfileApp.API.Models.Message", b =>
+                {
+                    b.HasOne("CardsProfileApp.API.Models.User", "Recipient")
+                        .WithMany("MessagesReceived")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("CardsProfileApp.API.Models.User", "Sender")
+                        .WithMany("MessagesSent")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CardsProfileApp.API.Models.Photo", b =>
